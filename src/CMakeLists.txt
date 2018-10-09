@@ -4,3 +4,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
 
 ADD_SUBDIRECTORY(Strategy)
 ADD_SUBDIRECTORY(Active)
+ADD_SUBDIRECTORY(Observer)
