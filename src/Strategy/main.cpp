@@ -54,8 +54,10 @@ class ParallelSummationStrategy : public ISummationStrategy<ElementType>
 public:
 	virtual auto sum(const Elements& elements) -> ElementType override
 	{
-		std::function<ElementType(Elements::const_iterator, Elements::const_iterator)> parallel_sum =
-			[&parallel_sum,size = elements.size()](Elements::const_iterator beg, Elements::const_iterator end)->ElementType
+		using elem_iter = typename Elements::const_iterator;
+		std::function<ElementType(elem_iter,elem_iter)> parallel_sum;
+		
+		parallel_sum = [&parallel_sum,size = elements.size()](auto beg, auto end)->ElementType
 		{
 			auto len = end - beg;
 			if (len <= size / 25) //reasonable amout  of threads
@@ -80,10 +82,11 @@ template <typename ElementType>
 class SequenceGeneratorStrategy : public IGeneratorStrategy<ElementType>
 {
 
+	using Elements = std::vector<ElementType>;
 public:
 	virtual auto generate(size_t count, ElementType start = ElementType()) -> Elements override
 	{
-		Elements return_values(count);
+	 	Elements return_values(count);
 		std::iota(std::begin(return_values), std::end(return_values), start);
 		return return_values;
 	}
@@ -93,6 +96,8 @@ public:
 template <typename ElementType> 
 class PrimeSequenceGenerator : public IGeneratorStrategy<ElementType>
 {
+
+	using Elements = std::vector<ElementType>;
 public:
 	virtual auto generate(size_t count, ElementType start /* = ElementType() */) -> Elements
 	{
@@ -159,7 +164,7 @@ protected:
 };
 
 
-void main(void)
+int main(void)
 {
 	auto generator_strategy = std::make_unique<SequenceGeneratorStrategy<uint32_t>>();
 	auto prime_generator_strategy = std::make_unique<PrimeSequenceGenerator<uint32_t>>();
@@ -183,5 +188,5 @@ void main(void)
 		std::cout << "Sum is " << prime_maker.make(count, 1) << std::endl;
 		std::cout << "Took " << std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - start).count() << " ms\n";
 	}
-	
+	return 0;	
 }
