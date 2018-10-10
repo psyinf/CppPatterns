@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
-
+# vim swp files
+*.swp
 build/*
 install/*
