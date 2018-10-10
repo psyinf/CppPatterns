@@ -15,6 +15,7 @@ class TimeDataProvider : public IObservable
 	
 public:
 	TimeDataProvider()
+		:mCurrentTime(std::chrono::system_clock::now())
 	{
 		mRunning = true;
 		mUpdateThread = std::thread( &TimeDataProvider::run, this);
@@ -70,7 +71,7 @@ public:
 protected:
 	std::thread				mUpdateThread;
 	std::mutex				mObserversMutex;
-	std::atomic<TimeData>	mCurrentTime;
+	std::atomic<TimeData>		mCurrentTime;
 	std::atomic_bool		mRunning;
 	ObserverList			mObservers;
 };

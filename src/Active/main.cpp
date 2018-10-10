@@ -5,6 +5,7 @@
 #include <optional>
 #include <queue>
 #include <string>
+#include <thread>
 
 /**
  * \brief	thread safe queue, sort of
